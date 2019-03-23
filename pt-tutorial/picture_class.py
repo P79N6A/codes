@@ -1,5 +1,6 @@
 # coding: utf-8
 # %matplotlib inline
+import os
 from sklearn.metrics import classification_report, accuracy_score
 import logging
 from torch.autograd import Variable
@@ -94,27 +95,39 @@ class Net(nn.Module):
     #     return x
 
 
-net = Net()
-'''定义代价函数和优化器'''
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
-'''train model'''
-epoch_num = 1
-for epoch in range(epoch_num):
-    running_loss = 0.0
-    for i, data in enumerate(trainloader, 0):
-        inputs, labels = data
-        '''为什么要放进变量里呢？'''
-        inputs, labels = Variable(inputs), Variable(labels)
-        optimizer.zero_grad()
-        outputs = net(inputs)
-        loss = criterion(outputs, labels)
-        loss.backward()
-        optimizer.step()
-        running_loss += loss
-        if i % 2000 == 1999:
-            logging.info('training: epoch: %s, data_iter: %s, loss:%s', epoch + 1, i + 1, running_loss / 2000)
+def load_model(model_path):
+    net = Net()
+    if os.path.exists(model_path):
+        net.load_state_dict(torch.load(model_path))
+        net.eval()
+    else:
+        '''定义代价函数和优化器'''
+        criterion = nn.CrossEntropyLoss()
+        optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+        '''train model'''
+        epoch_num = 1
+        for epoch in range(epoch_num):
             running_loss = 0.0
+            for i, data in enumerate(trainloader, 0):
+                inputs, labels = data
+                '''为什么要放进变量里呢？'''
+                inputs, labels = Variable(inputs), Variable(labels)
+                optimizer.zero_grad()
+                outputs = net(inputs)
+                loss = criterion(outputs, labels)
+                loss.backward()
+                optimizer.step()
+                running_loss += loss
+                if i % 2000 == 1999:
+                    logging.info('training: epoch: %s, data_iter: %s, loss:%s', epoch + 1, i + 1, running_loss / 2000)
+                    running_loss = 0.0
+        torch.save(net.state_dict(), model_path)
+    return net
+
+
+model_path = './model/picture_class.pt'
+net = load_model(model_path)
+
 
 dataiter = iter(testloader)
 images, labels = dataiter.next()
