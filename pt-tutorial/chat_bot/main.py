@@ -491,8 +491,11 @@ encoder_n_layers = 2
 decoder_n_layers = 2
 dropout = 0.1
 batch_size = 64
-loadFilename = None
 checkpoint_iter = 4000
+loadFilename = os.path.join(save_dir, model_name, corpus_name,
+                            '{}-{}_{}'.format(encoder_n_layers, decoder_n_layers, hidden_size),
+                            '{}_checkpoint.tar'.format(checkpoint_iter))
+checkpoint_iter = 0
 if loadFilename:
     checkpoint = torch.load(loadFilename)
     encoder_sd = checkpoint['en']

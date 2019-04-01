@@ -186,3 +186,25 @@ print(decoder_output)
 print(torch.max(decoder_output, dim=1))
 
 print(torch.cat((torch.tensor([1]), torch.tensor([2])), dim=0))
+
+'''
+https://zhuanlan.zhihu.com/p/31495102
+expand
+'''
+x = torch.Tensor([[1], [2], [3]])
+print(x.size())
+x = x.expand(3, 4)
+print(x)
+
+
+a = [1, 2, 3, 4, 5]
+print(a[::-1])
+
+'''
+full
+'''
+print(torch.full((2, 3), 3))
+
+
+x = torch.randn(1, 3)
+print(torch.cat((x, x)))
