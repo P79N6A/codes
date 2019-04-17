@@ -5,12 +5,19 @@ import torch.nn.functional as F
 import torch
 import numpy as np
 # print(torch.Tensor(100))
-a = np.array([1])
-b = torch.from_numpy(a)
-b = b.squeeze()
-print(b.item())
-print(b.data)
-print(type(b.data))
+# a = np.array([1])
+# b = torch.from_numpy(a)
+# b = b.squeeze()
+b = torch.randn(1, 4)
+print(b.shape)
+print(b)
+b = b.view(4, 1)
+# b = b.squeeze()
+print(b)
+print(b.shape)
+# print(b.item())
+# print(b.data)
+# print(type(b.data))
 
 
 print(torch.tensor([1, 2, 3]))
@@ -208,3 +215,6 @@ print(torch.full((2, 3), 3))
 
 x = torch.randn(1, 3)
 print(torch.cat((x, x)))
+
+
+
